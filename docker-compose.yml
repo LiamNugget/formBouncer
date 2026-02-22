@@ -1,0 +1,57 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-formshield}
+      MYSQL_DATABASE: formshield
+      MYSQL_USER: ${DB_USERNAME:-formshield}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-formshield}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.4-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1
+    volumes:
+      - redis_data:/data
+
+  ml:
+    build:
+      context: ./ml
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USERNAME: ${DB_USERNAME:-formshield}
+      DB_PASSWORD: ${DB_PASSWORD:-formshield}
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/formshield?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      REDIS_HOST: redis
+      ML_ENABLED: "true"
+      ML_SERVICE_URL: http://ml:5000
+      JWT_SECRET: ${JWT_SECRET:-change-this-in-production-min-32-chars-long!}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  mysql_data:
+  redis_data:

@@ -1,0 +1,15 @@
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    plan_id BIGINT NOT NULL,
+    submissions_this_month INT NOT NULL DEFAULT 0,
+    month_reset_at DATE NOT NULL,
+    spam_threshold DECIMAL(3,2) NOT NULL DEFAULT 0.70,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_users_plan FOREIGN KEY (plan_id) REFERENCES plans (id)
+);
+
+CREATE INDEX idx_users_email ON users (email);
