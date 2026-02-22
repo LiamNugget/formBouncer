@@ -1,0 +1,42 @@
+# ─── Java / Maven ─────────────────────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+
+# ─── IntelliJ / VSCode ────────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.DS_Store
+
+# ─── Spring Boot ──────────────────────────────────────────────────────────────
+application-local.yml
+*.env
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# ─── ML model artifacts (binary, large) ───────────────────────────────────────
+ml/model/classifier.pkl
+ml/model/vectorizer.pkl
+
+# ─── Corpus data (large binary downloads) ─────────────────────────────────────
+data/unprocessed/spamassassin/
+data/unprocessed/enron/
+data/unprocessed/ling_spam/
+
+# ─── Processed JSONL (generated — large, reproducible) ────────────────────────
+data/processed/*.jsonl
+
+# Keep tracked:
+!data/unprocessed/spamassassin/.gitkeep
+!data/unprocessed/enron/.gitkeep
+!data/unprocessed/ling_spam/.gitkeep
+!data/processed/.gitkeep
+!data/processed/schema.md
