@@ -91,9 +91,12 @@ You may not need every tool for every workflow, but these are the main technolog
 
 ```bash
 docker compose up --build
+```
 Run the Java app with Maven
+```
 mvn clean install
 mvn spring-boot:run
+```
 
 If your project is not using Spring Boot, replace the second command with your actual entrypoint command.
 
